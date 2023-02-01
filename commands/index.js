@@ -1,3 +1,4 @@
+import { userModel } from "../models/userModel.js";
 import { createOweMe } from "./components/createOweMe.js";
 
 export const commands = [

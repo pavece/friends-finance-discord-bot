@@ -1,4 +1,6 @@
 import { userModel } from "../../models/userModel.js";
+import { debtModel } from "../../models/debtModel.js";
+import { nanoid } from "nanoid";
 
 export const createOweMe = async (interaction) => {
   const options = interaction.options;
@@ -8,6 +10,31 @@ export const createOweMe = async (interaction) => {
   const amount = options.get("amount");
   const concept = options.get("concept");
 
+  const debt = {
+    amount: amount.value,
+    concept: concept.value,
+    date: new Date(),
+    filled: false,
+    debtId: nanoid(6),
+    to: user.id,
+    from: debtor.user.id,
+  };
+
+  const createDebt = async () => {
+    const newDebt = new debtModel(debt);
+    try {
+      await newDebt.save();
+    } catch (e) {
+      console.log(e);
+    }
+    return newDebt._id;
+  };
+
+
+  const debtId = await createDebt();
+  console.log(debtId)
+
+
   const createDebtor = async () => {
     const existingDebtor = await userModel.find({ userId: debtor.user.id });
 
@@ -16,14 +43,7 @@ export const createOweMe = async (interaction) => {
         username: debtor.user.username,
         userId: debtor.user.id,
         avatarId: debtor.user.avatar,
-        debts: [
-          {
-            amount: amount.value,
-            concept: concept.value,
-            date: new Date(),
-            to: user.id,
-          },
-        ],
+        debts: [debtId],
         oweMe: [],
       });
       try {
@@ -36,15 +56,7 @@ export const createOweMe = async (interaction) => {
         await userModel.updateOne(
           { userId: debtor.user.id },
           {
-            debts: [
-              ...existingDebtor[0].debts,
-              {
-                amount: amount.value,
-                concept: concept.value,
-                date: new Date(),
-                to: user.id,
-              },
-            ],
+            debts: [...existingDebtor[0].debts, debtId],
           }
         );
       } catch (e) {
@@ -64,14 +76,7 @@ export const createOweMe = async (interaction) => {
         userId: user.id,
         avatarId: user.avatar,
         debts: [],
-        oweMe: [
-          {
-            amount: amount.value,
-            concept: concept.value,
-            date: new Date(),
-            from: debtor.user.id,
-          },
-        ],
+        oweMe: [debtId],
       });
       try {
         await newCreditor.save();
@@ -83,15 +88,7 @@ export const createOweMe = async (interaction) => {
         await userModel.updateOne(
           { userId: user.id },
           {
-            oweMe: [
-              ...currentCreditor.oweMe,
-              {
-                amount: amount.value,
-                concept: concept.value,
-                date: new Date(),
-                from: debtor.user.id,
-              },
-            ],
+            oweMe: [...currentCreditor.oweMe, debtId],
           }
         );
       } catch (e) {
@@ -100,12 +97,17 @@ export const createOweMe = async (interaction) => {
     }
   };
 
-  createCreditor();
-  createDebtor();
+  await createCreditor();
+  await createDebtor();
 
   const embed = {
     color: 0x0099ff,
-    title: "Debt created",
+    author: {
+      name: debtor.user.username,
+      icon_url: `https://cdn.discordapp.com/avatars/${debtor.user.id}/${debtor.user.avatar}.jpeg`,
+    },
+    title: `Debt created, you can access the debt by using: ***/debt ${debt.debtId}***`,
+    timestamp: debt.date.toISOString(),
     description: `Now <@${debtor.user.id}> owes you ${amount.value} with the concept: *** ${concept.value}***`,
   };
 
