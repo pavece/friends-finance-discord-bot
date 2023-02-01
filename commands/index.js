@@ -1,4 +1,4 @@
-import { userModel } from "../models/userModel.js";
+import { createOweMe } from "./components/createOweMe.js";
 
 export const commands = [
   {
@@ -8,23 +8,30 @@ export const commands = [
       interaction.reply("Pong");
     },
   },
+  //command to generate a new debt
   {
-    name: "testdatabase",
-    description: "A database testing command",
-    action: async (interaction) => {
-      if (
-        interaction.member
-          .permissionsIn(interaction.channel)
-          .has("ADMINISTRATOR")
-      ) {
-        interaction.reply("The user is admin");
-        const newUser = new userModel({
-          username: interaction.user.username,
-          id: interaction.user.id,
-        });
-        await newUser.save();
-      }
-      interaction.reply("The user is not admin");
-    },
+    name: "newdebt",
+    description: "Create a new debt",
+    options: [
+      {
+        name: "friend",
+        description: "The friend that owes you money",
+        type: 6,
+        required: true,
+      },
+      {
+        name: "amount",
+        description: "The amount he/she owes you",
+        type: 10,
+        required: true,
+      },
+      {
+        name: "concept",
+        description: "The reason why he/she owes you that money",
+        type: 3,
+        required: true,
+      },
+    ],
+    action: await createOweMe,
   },
 ];
