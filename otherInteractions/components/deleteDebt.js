@@ -13,19 +13,33 @@ export const deleteDebt = async (interaction) => {
     color: "15548997",
   };
 
+  const unauthorizedEmbed = {
+    title:
+      "Only admins and the creditor can fill and delete debts. If you are the debtor and want to delete the order you need to contact with the creditor or ask an administrator to delete the debt",
+    color: "15548997",
+  };
+
   const debt = await debtModel.findOne({ _id: debtId });
 
-  if (debt && debt.deleted === false && debt.filled === false) {
-    try {
-      //we change a prop instead of deleting from the DB so we can keep track of this debt later
-      await debtModel.findOneAndUpdate({ _id: debtId }, { deleted: true });
+  if (
+    debt.to === interaction.user.id ||
+    interaction.member.permissions.has("ADMINISTRATOR")
+  ) {
+    if (debt && debt.deleted === false && debt.filled === false) {
+      try {
+        //we change a prop instead of deleting from the DB so we can keep track of this debt later
+        await debtModel.findOneAndUpdate({ _id: debtId }, { deleted: true });
 
-      interaction.reply({ embeds: [sucEmbed] });
-    } catch (e) {
-      console.log(e);
+        interaction.reply({ embeds: [sucEmbed] });
+      } catch (e) {
+        console.log(e);
+        interaction.reply({ embeds: [errorEmbed] });
+      }
+    } else {
       interaction.reply({ embeds: [errorEmbed] });
     }
   } else {
-    interaction.reply({ embeds: [errorEmbed] });
+    interaction.reply({ embeds: [unauthorizedEmbed] });
+    return;
   }
 };
