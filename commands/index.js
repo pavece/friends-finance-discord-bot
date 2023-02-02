@@ -1,3 +1,4 @@
+import { checkUserDetails } from "./components/checkUserDetails.js";
 import { createOweMe } from "./components/createOweMe.js";
 import { getDebt } from "./components/getDebt.js";
 
@@ -41,5 +42,19 @@ export const commands = [
       },
     ],
     action: await getDebt,
+  },
+  {
+    name: "userdetails",
+    description: "Check a user's debts",
+    options: [
+      {
+        name: "user",
+        description:
+          "The username of the person you want to check details from",
+        type: 6,
+        required: true,
+      },
+    ],
+    action: checkUserDetails
   },
 ];
