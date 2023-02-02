@@ -5,6 +5,7 @@ const debtSchema = new mongoose.Schema({
   concept: String,
   date: String,
   filled: Boolean,
+  deleted: { type: Boolean, required: true, default: false },
   debtId: { type: String, index: true },
   to: String,
   from: String,

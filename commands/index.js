@@ -1,14 +1,7 @@
-import { userModel } from "../models/userModel.js";
 import { createOweMe } from "./components/createOweMe.js";
+import { getDebt } from "./components/getDebt.js";
 
 export const commands = [
-  {
-    name: "ping",
-    description: "Replies with Pong!",
-    action: (interaction) => {
-      interaction.reply("Pong");
-    },
-  },
   //command to generate a new debt
   {
     name: "newdebt",
@@ -34,5 +27,19 @@ export const commands = [
       },
     ],
     action: await createOweMe,
+  },
+  {
+    name: "debt",
+    description: "View the details of a desired debt",
+    options: [
+      {
+        name: "id",
+        description:
+          "The id of the debt. Provided when you create them or when you visualize a user's debts",
+        type: 3,
+        required: true,
+      },
+    ],
+    action: await getDebt,
   },
 ];

@@ -15,6 +15,7 @@ export const createOweMe = async (interaction) => {
     concept: concept.value,
     date: new Date(),
     filled: false,
+    deleted: false,
     debtId: nanoid(6),
     to: user.id,
     from: debtor.user.id,
@@ -30,10 +31,8 @@ export const createOweMe = async (interaction) => {
     return newDebt._id;
   };
 
-
   const debtId = await createDebt();
-  console.log(debtId)
-
+  console.log(debtId);
 
   const createDebtor = async () => {
     const existingDebtor = await userModel.find({ userId: debtor.user.id });
