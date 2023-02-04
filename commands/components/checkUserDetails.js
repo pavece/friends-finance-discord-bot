@@ -63,11 +63,14 @@ export const checkUserDetails = async (interaction) => {
     title: "Nobody owes money to this user!",
     color: "5763719",
   };
-
-  interaction.reply({
+  
+  await interaction.reply({
+    content: `These are the debts and oweMe's from ${user.username}. Remember that if this user owes you money you can access the specific debt with the command ***/debt ID*** in order to fill the debt or to delete it.`,
     embeds: [
       debts[0] ? userDebtsResponse : noDebts,
       oweMe[0] ? userOweMeResponse : noOweMe,
     ],
+    fetchReply: true,
+    ephemeral: true,
   });
 };

@@ -1,6 +1,6 @@
 import { checkUserDetails } from "./components/checkUserDetails.js";
 import { createOweMe } from "./components/createOweMe.js";
-import { getDebt } from "./components/getDebt.js";
+import { getDebt } from "./components/getDebt.js"
 
 export const commands = [
   //command to generate a new debt
@@ -29,6 +29,7 @@ export const commands = [
     ],
     action: await createOweMe,
   },
+  //command to check debts
   {
     name: "debt",
     description: "View the details of a desired debt",
@@ -43,6 +44,7 @@ export const commands = [
     ],
     action: await getDebt,
   },
+  //command to check user's debts as user
   {
     name: "userdetails",
     description: "Check a user's debts",
@@ -55,6 +57,6 @@ export const commands = [
         required: true,
       },
     ],
-    action: checkUserDetails
+    action: await checkUserDetails,
   },
 ];
