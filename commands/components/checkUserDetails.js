@@ -1,4 +1,5 @@
 import { userModel } from "../../models/userModel.js";
+import { config } from "../../config.js";
 
 export const checkUserDetails = async (interaction) => {
   const targetId = interaction.options.get("user").user.id;
@@ -23,7 +24,7 @@ export const checkUserDetails = async (interaction) => {
     .map((d) => {
       return {
         name: "ID: " + d.debtId,
-        value: `Amount: ***${d.amount}*** | Creditor: <@${d.to}> | Concept: ${
+        value: `Amount: ***${d.amount + config.currency}*** | Creditor: <@${d.to}> | Concept: ${
           d.concept
         } | Date: ${new Date(d.date).toLocaleString()}`,
       };
@@ -34,7 +35,7 @@ export const checkUserDetails = async (interaction) => {
     .map((d) => {
       return {
         name: "ID: " + d.debtId,
-        value: `Amount: ***${d.amount}*** | Debtor: <@${d.from}> | Concept: ${
+        value: `Amount: ***${d.amount + config.currency}*** | Debtor: <@${d.from}> | Concept: ${
           d.concept
         } | Date: ${new Date(d.date).toLocaleString()}`,
       };

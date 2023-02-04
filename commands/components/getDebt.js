@@ -1,6 +1,5 @@
 import { debtModel } from "../../models/debtModel.js";
-import { ActionRowBuilder, ButtonBuilder } from "@discordjs/builders";
-import { ButtonStyle } from "discord.js";
+import { config } from "../../config.js";
 
 export const getDebt = async (interaction) => {
   const debtId = interaction.options.get("id").value;
@@ -23,12 +22,12 @@ export const getDebt = async (interaction) => {
 
     //TODO: Update with specific image from the config
     thumbnail: {
-      url: "https://i.imgur.com/AfFp7pu.png",
+      url: config.debtDetailsThumbnail,
     },
     fields: [
       {
         name: "Amount",
-        value: debt.amount,
+        value: debt.amount + config.currency,
       },
       {
         name: "Concept",
