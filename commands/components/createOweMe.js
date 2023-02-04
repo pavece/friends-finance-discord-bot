@@ -11,8 +11,6 @@ export const createOweMe = async (interaction) => {
   const amount = options.get("amount");
   const concept = options.get("concept");
 
-  console.log(debtor.user);
-
   if (amount.value > config.maxDebtAmount) {
     const maxAmountExEmbed = {
       title: `You can't create a debt with a debt amount above ${
@@ -49,12 +47,10 @@ export const createOweMe = async (interaction) => {
   };
 
   const debtId = await createDebt();
-  
 
   const createDebtor = async () => {
     const existingDebtor = await userModel.find({ userId: debtor.user.id });
 
-    console.log(debtor.user.id)
 
     if (!existingDebtor[0]) {
       const newDebtor = new userModel({
