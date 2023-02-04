@@ -5,12 +5,16 @@ import { initCommands } from "./functions/initCommands.js";
 import { mongoDbCon } from "./functions/mongoCon.js";
 import { success } from "./utils/logger.js";
 import { rememberDebt } from "./tasks/rememberDebts.js";
+import { config } from "./config.js";
+import { ActivityType } from "discord.js";
 
 await initCommands();
 export const client = createClient();
 
 client.on("ready", async () => {
   success("Bot is ready");
+  client.user.setActivity(config.botStatusMessage, ActivityType.Watching);
+  client.user.setAvatar(config.botProfilePicture);
   await mongoDbCon();
   rememberDebt.start();
 });
