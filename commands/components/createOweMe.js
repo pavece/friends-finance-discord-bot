@@ -11,13 +11,16 @@ export const createOweMe = async (interaction) => {
   const amount = options.get("amount");
   const concept = options.get("concept");
 
+  console.log(debtor.user);
+
   if (amount.value > config.maxDebtAmount) {
     const maxAmountExEmbed = {
       title: `You can't create a debt with a debt amount above ${
         config.maxDebtAmount + config.currency
       }`,
-      description:
-        `If you need to create a debt with a amount superior to ${config.maxDebtAmount+config.currency} you can contact the administrator`,
+      description: `If you need to create a debt with a amount superior to ${
+        config.maxDebtAmount + config.currency
+      } you can contact the administrator`,
       color: "15548997",
     };
     interaction.reply({ embeds: [maxAmountExEmbed] });
@@ -46,10 +49,12 @@ export const createOweMe = async (interaction) => {
   };
 
   const debtId = await createDebt();
-  console.log(debtId);
+  
 
   const createDebtor = async () => {
     const existingDebtor = await userModel.find({ userId: debtor.user.id });
+
+    console.log(debtor.user.id)
 
     if (!existingDebtor[0]) {
       const newDebtor = new userModel({

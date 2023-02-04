@@ -4,13 +4,15 @@ import { createClient } from "./functions/initBot.js";
 import { initCommands } from "./functions/initCommands.js";
 import { mongoDbCon } from "./functions/mongoCon.js";
 import { success } from "./utils/logger.js";
+import { rememberDebt } from "./tasks/rememberDebts.js";
 
 await initCommands();
-const client = createClient();
+export const client = createClient();
 
 client.on("ready", async () => {
   success("Bot is ready");
   await mongoDbCon();
+  rememberDebt.start();
 });
 
 client.on("interactionCreate", async (interaction) => {
