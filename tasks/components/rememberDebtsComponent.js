@@ -1,10 +1,15 @@
 import { userModel } from "../../models/userModel.js";
-import { config } from "../../config.js";
 import { client } from "../../app.js";
 
 export const rememberDebtsComponent = async () => {
   const users = await userModel.find({}).populate("debts").populate("oweMe");
-  const channel = client.channels.cache.get(config.noticeChannelId);
+
+  if (process.env.NOTICE_CHANNEL_ID === "" || !process.env.NOTICE_CHANNEL_ID)
+    return console.log(
+      "CONFIG ERROR: No notice channel ID specified in the dotenv file. If you don't specify a NOTICE_CHANNEL_ID the bot can't sent automatic notifications."
+    );
+
+  const channel = client.channels.cache.get(process.env.NOTICE_CHANNEL_ID);
 
   const debtors = users
     .filter((e) => {
@@ -20,7 +25,6 @@ export const rememberDebtsComponent = async () => {
     })
     .map((c) => `<@${c.userId}>`);
 
-  
   if (!creditors[0] && !debtors[0]) return;
 
   channel.send("***IMPORTANT NOTICE***");

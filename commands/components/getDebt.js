@@ -1,5 +1,4 @@
 import { debtModel } from "../../models/debtModel.js";
-import { config } from "../../config.js";
 
 export const getDebt = async (interaction) => {
   const debtId = interaction.options.get("id").value;
@@ -19,15 +18,13 @@ export const getDebt = async (interaction) => {
   const debtMessage = {
     color: 15844367,
     title: `Debt (ID: ${debt.debtId})`,
-
-    //TODO: Update with specific image from the config
     thumbnail: {
-      url: config.debtDetailsThumbnail,
+      url: process.env.DEBT_DETAILS_PICTURE,
     },
     fields: [
       {
         name: "Amount",
-        value: debt.amount + config.currency,
+        value: debt.amount + process.env.CURRENCY,
       },
       {
         name: "Concept",

@@ -1,7 +1,6 @@
 import { userModel } from "../../models/userModel.js";
 import { debtModel } from "../../models/debtModel.js";
 import { nanoid } from "nanoid";
-import { config } from "../../config.js";
 
 export const createOweMe = async (interaction) => {
   const options = interaction.options;
@@ -11,13 +10,13 @@ export const createOweMe = async (interaction) => {
   const amount = options.get("amount");
   const concept = options.get("concept");
 
-  if (amount.value > config.maxDebtAmount) {
+  if (amount.value > process.env.MAX_DEBT_AMOUNT) {
     const maxAmountExEmbed = {
       title: `You can't create a debt with a debt amount above ${
-        config.maxDebtAmount + config.currency
+        process.env.MAX_DEBT_AMOUNT + process.env.CURRENCY
       }`,
       description: `If you need to create a debt with a amount superior to ${
-        config.maxDebtAmount + config.currency
+        process.env.MAX_DEBT_AMOUNT + process.env.CURRENCY
       } you can contact the administrator`,
       color: "15548997",
     };
@@ -50,7 +49,6 @@ export const createOweMe = async (interaction) => {
 
   const createDebtor = async () => {
     const existingDebtor = await userModel.find({ userId: debtor.user.id });
-
 
     if (!existingDebtor[0]) {
       const newDebtor = new userModel({
@@ -121,7 +119,7 @@ export const createOweMe = async (interaction) => {
     title: `Debt created, you can access the debt by using: ***/debt ${debt.debtId}***`,
     timestamp: debt.date.toISOString(),
     description: `Now <@${debtor.user.id}> owes you ${
-      amount.value + config.currency
+      amount.value + process.env.CURRENCY
     } with the concept: *** ${concept.value}***`,
   };
 

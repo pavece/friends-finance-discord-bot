@@ -1,7 +1,16 @@
 import cron from "node-cron";
-import { config } from "../config.js";
 import { rememberDebtsComponent } from "./components/rememberDebtsComponent.js";
 
-export const rememberDebt = cron.schedule(config.noticeFrequency, () => {
-  rememberDebtsComponent();
-});
+import * as dotenv from "dotenv";
+dotenv.config();
+
+export const rememberDebt = cron.schedule(
+  process.env.NOTICE_FREQUENCY || "00 22 * * *",
+  () => {
+    rememberDebtsComponent();
+  },
+  {
+    timezone: process.env.NOTICE_TIMEZONE || "Europe/Madrid",
+    scheduled: true,
+  }
+);

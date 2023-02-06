@@ -1,6 +1,7 @@
 import { checkUserDetails } from "./components/checkUserDetails.js";
 import { createOweMe } from "./components/createOweMe.js";
-import { getDebt } from "./components/getDebt.js"
+import { getDebt } from "./components/getDebt.js";
+import { helpCommand } from "./components/helpCommand.js";
 
 export const commands = [
   //command to generate a new debt
@@ -16,7 +17,7 @@ export const commands = [
       },
       {
         name: "amount",
-        description: "The amount he/she owes you",
+        description: "The amount the debtor owes you",
         type: 10,
         required: true,
       },
@@ -58,5 +59,10 @@ export const commands = [
       },
     ],
     action: await checkUserDetails,
+  },
+  {
+    name: "help",
+    description: "Get help using the basic friends finance commands",
+    action: helpCommand,
   },
 ];

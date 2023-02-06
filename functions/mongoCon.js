@@ -1,8 +1,5 @@
 import mongoose from "mongoose";
-
-import dotenv from "dotenv";
 import { error, success } from "../utils/logger.js";
-dotenv.config();
 
 export const mongoDbCon = async () => {
   try {

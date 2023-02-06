@@ -5,16 +5,21 @@ import { initCommands } from "./functions/initCommands.js";
 import { mongoDbCon } from "./functions/mongoCon.js";
 import { success } from "./utils/logger.js";
 import { rememberDebt } from "./tasks/rememberDebts.js";
-import { config } from "./config.js";
 import { ActivityType } from "discord.js";
+
+import * as dotenv from "dotenv";
+dotenv.config();
 
 await initCommands();
 export const client = createClient();
 
 client.on("ready", async () => {
   success("Bot is ready");
-  client.user.setActivity(config.botStatusMessage, ActivityType.Watching);
-  client.user.setAvatar(config.botProfilePicture);
+  client.user.setActivity(
+    process.env.BOT_STATUS_MESSAGE,
+    ActivityType.Playing
+  );
+  client.user.setAvatar(process.env.BOT_PROFILE_PICTURE);
   await mongoDbCon();
   rememberDebt.start();
 });
