@@ -1,8 +1,21 @@
 services:
-  stdfdb:
-    image: mongo:5.0.0
-    container_name: friends-finance-database
-    ports: 
-      - "27017:27017"
+  nodejs:
+    image: node:18
+    container_name: friends-finance-discord-bot
+    restart: unless-stopped
+    working_dir: /app
+    command: npm run start
+    env_file: .env
+    environment:
+      - BOT_TOKEN=
+      - BOT_ID=
+      - MONGO_CON_URL=
+      - BOT_PROFILE_PICTURE=https://res.cloudinary.com/dnh0go0q2/image/upload/v1675528750/ff_logo_ho8j3x.png
+      - BOT_STATUS_MESSAGE=Managing your debts...
+      - CURRENCY=€
+      - MAX_DEBT_AMOUNT=40
+      - NOTICE_CHANNEL_ID=
+      - NOTICE_FREQUENCY=00 22 * * *
+      - NOTICE_TIMEZONE=Europe/Madrid
     volumes:
-      - ./mongo:/data/db
+      - ./:/app
