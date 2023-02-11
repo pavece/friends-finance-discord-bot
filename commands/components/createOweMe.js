@@ -10,6 +10,16 @@ export const createOweMe = async (interaction) => {
   const amount = options.get("amount");
   const concept = options.get("concept");
 
+  if (debtor.user === user || debtor.user.bot) {
+    const error = {
+      title: "Not allowed",
+      description: "You cant create debts against yourself or bots",
+      color: "15548997",
+    };
+    interaction.reply({ embeds: [error] });
+    return;
+  }
+
   if (amount.value > process.env.MAX_DEBT_AMOUNT) {
     const maxAmountExEmbed = {
       title: `You can't create a debt with a debt amount above ${
