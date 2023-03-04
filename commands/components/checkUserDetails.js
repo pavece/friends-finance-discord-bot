@@ -52,7 +52,7 @@ export const checkUserDetails = async (interaction) => {
     color: "5763719",
     description:
       "This are the Owe Me from this user: \n\n" +
-      [debts.join("\n------------------------\n")],
+      [oweMe.join("\n------------------------\n")],
   };
 
   const noDebts = {
